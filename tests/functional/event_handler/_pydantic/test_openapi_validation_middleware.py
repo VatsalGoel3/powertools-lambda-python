@@ -5,7 +5,7 @@ import warnings
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import PurePath
-from typing import Any, Dict, List, Literal, Optional, Tuple, Union
+from typing import Any, Literal, Optional, Union
 
 import pytest
 from pydantic import (
@@ -113,7 +113,7 @@ def test_validate_multi_value_query_params(gw_event):
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.get("/users")
-    def users_handler(ids: Annotated[List[int], Query()]):
+    def users_handler(ids: Annotated[list[int], Query()]):
         return {"ids": ids}
 
     # Test valid request
@@ -142,7 +142,7 @@ def test_validate_pydantic_multi_value_query_params(gw_event):
     app = APIGatewayRestResolver(enable_validation=True)
 
     class QueryParams(BaseModel):
-        ids: List[int] = Field(..., description="List of user IDs")
+        ids: list[int] = Field(..., description="List of user IDs")
 
     @app.get("/users")
     def users_handler(params: Annotated[QueryParams, Query()]):
@@ -269,7 +269,7 @@ def test_validate_multi_value_header_params(gw_event):
     del gw_event["multiValueHeaders"]
 
     @app.get("/multi-value-headers")
-    def multi_value_handler(my_headers: Annotated[List[str], Header()]):
+    def multi_value_handler(my_headers: Annotated[list[str], Header()]):
         return {"items": my_headers}
 
     # Test valid request
@@ -300,7 +300,7 @@ def test_validate_pydantic_multi_value_header_params(gw_event):
     del gw_event["multiValueHeaders"]
 
     class MultiValueHeaderParams(BaseModel):
-        list_items: List[str] = Field(description="List of items")
+        list_items: list[str] = Field(description="List of items")
 
     @app.get("/multi-value-headers")
     def multi_value_handler(my_headers: Annotated[MultiValueHeaderParams, Header()]):
@@ -534,7 +534,7 @@ def test_validate_return_list(gw_event):
 
     # WHEN a handler is defined with a return type
     @app.get("/")
-    def handler() -> List[int]:
+    def handler() -> list[int]:
         return [123, 234]
 
     gw_event["path"] = "/"
@@ -554,7 +554,7 @@ def test_validate_return_tuple(gw_event):
 
     # WHEN a handler is defined with a return type as Tuple
     @app.get("/")
-    def handler() -> Tuple:
+    def handler() -> tuple:
         return sample_tuple
 
     gw_event["path"] = "/"
@@ -973,14 +973,14 @@ def test_validation_query_string_with_api_rest_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(parameter1: Annotated[List[str], Query()], parameter2: str):
+        def handler1(parameter1: Annotated[list[str], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(parameter1: Annotated[List[int], Query()], parameter2: str):
+        def handler2(parameter1: Annotated[list[int], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler3 without params
@@ -1028,14 +1028,14 @@ def test_validation_query_string_with_api_http_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(parameter1: Annotated[List[str], Query()], parameter2: str):
+        def handler1(parameter1: Annotated[list[str], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(parameter1: Annotated[List[int], Query()], parameter2: str):
+        def handler2(parameter1: Annotated[list[int], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler3 without params
@@ -1080,14 +1080,14 @@ def test_validation_query_string_with_alb_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(parameter1: Annotated[List[str], Query()], parameter2: str):
+        def handler1(parameter1: Annotated[list[str], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(parameter1: Annotated[List[int], Query()], parameter2: str):
+        def handler2(parameter1: Annotated[list[int], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler3 without params
@@ -1154,14 +1154,14 @@ def test_validation_query_string_with_lambda_url_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(parameter1: Annotated[List[str], Query()], parameter2: str):
+        def handler1(parameter1: Annotated[list[str], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(parameter1: Annotated[List[int], Query()], parameter2: str):
+        def handler2(parameter1: Annotated[list[int], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler3 without params
@@ -1207,14 +1207,14 @@ def test_validation_query_string_with_vpc_lattice_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(parameter1: Annotated[List[str], Query()], parameter2: str):
+        def handler1(parameter1: Annotated[list[str], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(parameter1: Annotated[List[int], Query()], parameter2: str):
+        def handler2(parameter1: Annotated[list[int], Query()], parameter2: str):
             print(parameter2)
 
     # Define handler3 without params
@@ -1262,14 +1262,14 @@ def test_validation_header_with_api_rest_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(header2: Annotated[List[str], Header()], header1: Annotated[str, Header()]):
+        def handler1(header2: Annotated[list[str], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(header2: Annotated[List[int], Header()], header1: Annotated[str, Header()]):
+        def handler2(header2: Annotated[list[int], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler3 with uppercase parameters
@@ -1277,7 +1277,7 @@ def test_validation_header_with_api_rest_resolver(
 
         @app.get("/users")
         def handler3(
-            header2: Annotated[List[str], Header(alias="Header2")],
+            header2: Annotated[list[str], Header(alias="Header2")],
             header1: Annotated[str, Header(alias="Header1")],
         ):
             print(header2)
@@ -1328,14 +1328,14 @@ def test_validation_header_with_http_rest_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(header2: Annotated[List[str], Header()], header1: Annotated[str, Header()]):
+        def handler1(header2: Annotated[list[str], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(header2: Annotated[List[int], Header()], header1: Annotated[str, Header()]):
+        def handler2(header2: Annotated[list[int], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler3 with uppercase parameters
@@ -1343,7 +1343,7 @@ def test_validation_header_with_http_rest_resolver(
 
         @app.get("/users")
         def handler3(
-            header2: Annotated[List[str], Header(alias="Header2")],
+            header2: Annotated[list[str], Header(alias="Header2")],
             header1: Annotated[str, Header(alias="Header1")],
         ):
             print(header2)
@@ -1391,14 +1391,14 @@ def test_validation_header_with_alb_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(header2: Annotated[List[str], Header()], header1: Annotated[str, Header()]):
+        def handler1(header2: Annotated[list[str], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(header2: Annotated[List[int], Header()], header1: Annotated[str, Header()]):
+        def handler2(header2: Annotated[list[int], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler3 with uppercase parameters
@@ -1406,7 +1406,7 @@ def test_validation_header_with_alb_resolver(
 
         @app.get("/users")
         def handler3(
-            header2: Annotated[List[str], Header(alias="Header2")],
+            header2: Annotated[list[str], Header(alias="Header2")],
             header1: Annotated[str, Header(alias="Header1")],
         ):
             print(header2)
@@ -1456,14 +1456,14 @@ def test_validation_header_with_lambda_url_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(header2: Annotated[List[str], Header()], header1: Annotated[str, Header()]):
+        def handler1(header2: Annotated[list[str], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(header2: Annotated[List[int], Header()], header1: Annotated[str, Header()]):
+        def handler2(header2: Annotated[list[int], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler3 with uppercase parameters
@@ -1471,7 +1471,7 @@ def test_validation_header_with_lambda_url_resolver(
 
         @app.get("/users")
         def handler3(
-            header2: Annotated[List[str], Header(alias="Header2")],
+            header2: Annotated[list[str], Header(alias="Header2")],
             header1: Annotated[str, Header(alias="Header1")],
         ):
             print(header2)
@@ -1520,14 +1520,14 @@ def test_validation_header_with_vpc_lattice_v1_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(header2: Annotated[List[str], Header()], header1: Annotated[str, Header()]):
+        def handler1(header2: Annotated[list[str], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler2(header2: Annotated[List[int], Header()], header1: Annotated[str, Header()]):
+        def handler2(header2: Annotated[list[int], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler3 with uppercase parameters
@@ -1535,7 +1535,7 @@ def test_validation_header_with_vpc_lattice_v1_resolver(
 
         @app.get("/users")
         def handler3(
-            header2: Annotated[List[str], Header(alias="Header2")],
+            header2: Annotated[list[str], Header(alias="Header2")],
             header1: Annotated[str, Header(alias="Header1")],
         ):
             print(header2)
@@ -1584,14 +1584,14 @@ def test_validation_header_with_vpc_lattice_v2_resolver(
     if handler_func == "handler1_with_correct_params":
 
         @app.get("/users")
-        def handler1(header2: Annotated[List[str], Header()], header1: Annotated[str, Header()]):
+        def handler1(header2: Annotated[list[str], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler2 with wrong params
     if handler_func == "handler2_with_wrong_params":
 
         @app.get("/users")
-        def handler1(header2: Annotated[List[int], Header()], header1: Annotated[str, Header()]):
+        def handler1(header2: Annotated[list[int], Header()], header1: Annotated[str, Header()]):
             print(header2)
 
     # Define handler3 with uppercase parameters
@@ -1599,7 +1599,7 @@ def test_validation_header_with_vpc_lattice_v2_resolver(
 
         @app.get("/users")
         def handler3(
-            header2: Annotated[List[str], Header(alias="Header2")],
+            header2: Annotated[list[str], Header(alias="Header2")],
             header1: Annotated[str, Header(alias="Header1")],
         ):
             print(header2)
@@ -1662,7 +1662,7 @@ def test_validate_list_response(gw_event):
     ]
 
     @app.get("/list_response_with_same_element_types")
-    def handler_different_list() -> List[Model]:
+    def handler_different_list() -> list[Model]:
         return response_before_validation
 
     # WHEN returning list with the same element type as the non-Optional return type
@@ -1709,7 +1709,7 @@ def test_validation_error_different_list_returned_non_optional_type(gw_event):
     different_list_response = ["a", "b", "c"]
 
     @app.get("/list_response_with_different_element_types")
-    def handler_different_list() -> List[Model]:
+    def handler_different_list() -> list[Model]:
         return different_list_response
 
     # WHEN returning list with the different element type as the non-Optional return type
@@ -2094,7 +2094,7 @@ def test_parse_form_data_url_encoded(gw_event):
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/form")
-    def post_form(name: Annotated[str, Form()], tags: Annotated[List[str], Form()]):
+    def post_form(name: Annotated[str, Form()], tags: Annotated[list[str], Form()]):
         return {"name": name, "tags": tags}
 
     # WHEN sending a POST request with URL-encoded form data
@@ -2125,7 +2125,7 @@ def test_parse_form_data_wrong_value(gw_event):
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/form")
-    def post_form(name: Annotated[str, Form()], tags: Annotated[List[str], Form()]):
+    def post_form(name: Annotated[str, Form()], tags: Annotated[list[str], Form()]):
         return {"name": name, "tags": tags}
 
     gw_event["httpMethod"] = "POST"
@@ -2744,7 +2744,7 @@ def test_validate_pydantic_query_params_with_config_dict_and_validators(gw_event
         search_id: str
 
     @app.get("/query-model-simple")
-    def query_model(params: Annotated[QuerySimple, Query()]) -> Dict[str, Any]:
+    def query_model(params: Annotated[QuerySimple, Query()]) -> dict[str, Any]:
         return {
             "fullName": params.full_name,
             "nextToken": params.next_token,
@@ -2764,7 +2764,7 @@ def test_validate_pydantic_query_params_with_config_dict_and_validators(gw_event
         )
 
     @app.get("/query-model-advanced")
-    def query_model_advanced(params: Annotated[QueryAdvanced, Query()]) -> Dict[str, Any]:
+    def query_model_advanced(params: Annotated[QueryAdvanced, Query()]) -> dict[str, Any]:
         return params.model_dump()
 
     # Test QuerySimple with validators
@@ -2927,7 +2927,7 @@ def test_validate_union_single_or_list_body_with_list(gw_event):
 
     # WHEN a handler is defined with Union[Model, List[Model]] body parameter
     @app.post("/items")
-    def handler(items: Annotated[Union[Item, List[Item]], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Union[Item, list[Item]], Body()]) -> dict[str, Any]:
         # Should receive the full list, not just the first element
         if isinstance(items, list):
             return {"count": len(items), "items": [item.model_dump() for item in items]}
@@ -2967,7 +2967,7 @@ def test_validate_union_single_or_list_body_with_single(gw_event):
 
     # WHEN a handler is defined with Union[Model, List[Model]] body parameter
     @app.post("/items")
-    def handler(items: Annotated[Union[Item, List[Item]], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Union[Item, list[Item]], Body()]) -> dict[str, Any]:
         if isinstance(items, list):
             return {"count": len(items), "items": [item.model_dump() for item in items]}
         else:
@@ -2997,12 +2997,12 @@ def test_validate_rootmodel_list_body(gw_event):
         name: str
         value: int
 
-    class ItemCollection(RootModel[List[Item]]):
-        root: List[Item]
+    class ItemCollection(RootModel[list[Item]]):
+        root: list[Item]
 
     # WHEN a handler is defined with RootModel[List[Model]] body parameter
     @app.post("/items")
-    def handler(collection: Annotated[ItemCollection, Body()]) -> Dict[str, Any]:
+    def handler(collection: Annotated[ItemCollection, Body()]) -> dict[str, Any]:
         # collection.root should contain the full list
         items = collection.root
         return {"count": len(items), "items": [item.model_dump() for item in items]}
@@ -3041,8 +3041,8 @@ def test_validate_nested_union_with_sequence(gw_event):
     # WHEN a handler is defined with a complex Union including List
     @app.post("/people")
     def handler(
-        data: Annotated[Union[str, List[Person], Person], Body()],
-    ) -> Dict[str, Any]:
+        data: Annotated[Union[str, list[Person], Person], Body()],
+    ) -> dict[str, Any]:
         if isinstance(data, str):
             return {"type": "string", "value": data}
         elif isinstance(data, list):
@@ -3079,7 +3079,7 @@ class _Item(BaseModel):
     value: int
 
 
-class _ItemCollection(RootModel[List[_Item]]):
+class _ItemCollection(RootModel[list[_Item]]):
     pass
 
 
@@ -3110,7 +3110,7 @@ def test_optional_list_body_with_list():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Optional[List[_Item]], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Optional[list[_Item]], Body()]) -> dict[str, Any]:
         assert isinstance(items, list)
         return {"count": len(items)}
 
@@ -3124,7 +3124,7 @@ def test_optional_list_body_with_none():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Optional[List[_Item]], Body()] = None) -> Dict[str, Any]:
+    def handler(items: Annotated[Optional[list[_Item]], Body()] = None) -> dict[str, Any]:
         return {"received_none": items is None}
 
     status, body = _post_json(app, "/items", None)
@@ -3140,7 +3140,7 @@ def test_optional_union_model_or_list_with_list():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Optional[Union[_Item, List[_Item]]], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Optional[Union[_Item, list[_Item]]], Body()]) -> dict[str, Any]:
         assert isinstance(items, list)
         return {"count": len(items)}
 
@@ -3154,7 +3154,7 @@ def test_optional_union_model_or_list_with_single():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Optional[Union[_Item, List[_Item]]], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Optional[Union[_Item, list[_Item]]], Body()]) -> dict[str, Any]:
         assert not isinstance(items, list)
         return {"name": items.name}
 
@@ -3168,7 +3168,7 @@ def test_optional_union_model_or_list_with_none():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Optional[Union[_Item, List[_Item]]], Body()] = None) -> Dict[str, Any]:
+    def handler(items: Annotated[Optional[Union[_Item, list[_Item]]], Body()] = None) -> dict[str, Any]:
         return {"is_none": items is None}
 
     status, body = _post_json(app, "/items", None)
@@ -3184,7 +3184,7 @@ def test_plain_list_body_preserves_all_items():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[List[_Item], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[list[_Item], Body()]) -> dict[str, Any]:
         return {"count": len(items)}
 
     status, body = _post_json(app, "/items", _THREE_ITEMS)
@@ -3200,7 +3200,7 @@ def test_union_model_or_list_with_empty_list():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Union[_Item, List[_Item]], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Union[_Item, list[_Item]], Body()]) -> dict[str, Any]:
         if isinstance(items, list):
             return {"count": len(items)}
         return {"count": 1}
@@ -3215,7 +3215,7 @@ def test_plain_list_with_empty_list():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[List[_Item], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[list[_Item], Body()]) -> dict[str, Any]:
         return {"count": len(items)}
 
     status, body = _post_json(app, "/items", [])
@@ -3231,7 +3231,7 @@ def test_union_model_or_list_with_single_element_list():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Union[_Item, List[_Item]], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Union[_Item, list[_Item]], Body()]) -> dict[str, Any]:
         if isinstance(items, list):
             return {"type": "list", "count": len(items)}
         return {"type": "single"}
@@ -3251,7 +3251,7 @@ def test_union_str_or_list_dict():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/data")
-    def handler(data: Annotated[Union[str, List[Dict[str, Any]]], Body()]) -> Dict[str, Any]:
+    def handler(data: Annotated[Union[str, list[dict[str, Any]]], Body()]) -> dict[str, Any]:
         if isinstance(data, list):
             return {"type": "list", "count": len(data)}
         return {"type": "str"}
@@ -3271,7 +3271,7 @@ def test_optional_rootmodel_list_body():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Optional[_ItemCollection], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Optional[_ItemCollection], Body()]) -> dict[str, Any]:
         return {"count": len(items.root)}
 
     status, body = _post_json(app, "/items", _THREE_ITEMS)
@@ -3284,7 +3284,7 @@ def test_union_rootmodel_and_model():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Union[_ItemCollection, _Item], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Union[_ItemCollection, _Item], Body()]) -> dict[str, Any]:
         if isinstance(items, _ItemCollection):
             return {"type": "collection", "count": len(items.root)}
         return {"type": "single", "name": items.name}
@@ -3303,7 +3303,7 @@ def test_pipe_union_syntax_model_or_list():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[_Item | List[_Item], Body()]) -> Dict[str, Any]:  # noqa: FA102
+    def handler(items: Annotated[_Item | list[_Item], Body()]) -> dict[str, Any]:  # noqa: FA102
         if isinstance(items, list):
             return {"count": len(items)}
         return {"count": 1}
@@ -3318,7 +3318,7 @@ def test_pipe_union_optional_list():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[List[_Item] | None, Body()]) -> Dict[str, Any]:  # noqa: FA102
+    def handler(items: Annotated[list[_Item] | None, Body()]) -> dict[str, Any]:  # noqa: FA102
         if items is None:
             return {"count": 0}
         return {"count": len(items)}
@@ -3335,11 +3335,11 @@ def test_rootmodel_wrapping_union_with_sequence():
     """RootModel[Union[Model, List[Model]]] — inner Union sequence must be detected."""
     app = APIGatewayRestResolver(enable_validation=True)
 
-    class FlexiblePayload(RootModel[Union[_Item, List[_Item]]]):
+    class FlexiblePayload(RootModel[Union[_Item, list[_Item]]]):
         pass
 
     @app.post("/items")
-    def handler(payload: Annotated[FlexiblePayload, Body()]) -> Dict[str, Any]:
+    def handler(payload: Annotated[FlexiblePayload, Body()]) -> dict[str, Any]:
         data = payload.root
         if isinstance(data, list):
             return {"type": "list", "count": len(data)}
@@ -3360,7 +3360,7 @@ def test_union_list_body_works_across_resolvers():
         app = ResolverClass(enable_validation=True)
 
         @app.post("/items")
-        def handler(items: Annotated[Union[_Item, List[_Item]], Body()]) -> Dict[str, Any]:
+        def handler(items: Annotated[Union[_Item, list[_Item]], Body()]) -> dict[str, Any]:
             if isinstance(items, list):
                 return {"count": len(items)}
             return {"count": 1}
@@ -3391,7 +3391,7 @@ def test_union_list_body_large_payload():
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/items")
-    def handler(items: Annotated[Union[_Item, List[_Item]], Body()]) -> Dict[str, Any]:
+    def handler(items: Annotated[Union[_Item, list[_Item]], Body()]) -> dict[str, Any]:
         assert isinstance(items, list)
         return {"count": len(items)}
 
@@ -3404,7 +3404,7 @@ def test_union_list_body_large_payload():
 # ---------- File upload (multipart/form-data) ----------
 
 
-def _build_multipart_body(fields: List[Dict], boundary: str = "----TestBoundary") -> Tuple[str, str]:
+def _build_multipart_body(fields: list[dict], boundary: str = "----TestBoundary") -> tuple[str, str]:
     """
     Build a multipart/form-data body and return (base64_body, content_type).
 
@@ -3812,7 +3812,7 @@ def test_multipart_multiple_values_same_field(gw_event):
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/upload")
-    def upload(file_data: Annotated[List[UploadFile], File()]):
+    def upload(file_data: Annotated[list[UploadFile], File()]):
         return {"count": len(file_data), "filenames": [f.filename for f in file_data]}
 
     # Build body with two parts having the same field name
@@ -3849,7 +3849,7 @@ def test_multipart_three_values_same_field(gw_event):
     app = APIGatewayRestResolver(enable_validation=True)
 
     @app.post("/upload")
-    def upload(file_data: Annotated[List[UploadFile], File()]):
+    def upload(file_data: Annotated[list[UploadFile], File()]):
         return {"count": len(file_data), "filenames": [f.filename for f in file_data]}
 
     boundary = "----TestBoundary"

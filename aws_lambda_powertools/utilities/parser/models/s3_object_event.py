@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Type, Union
+from typing import Optional, Union
 
 from pydantic import BaseModel, HttpUrl
 
@@ -12,12 +12,12 @@ class S3ObjectContext(BaseModel):
 class S3ObjectConfiguration(BaseModel):
     accessPointArn: str
     supportingAccessPointArn: str
-    payload: Union[str, Type[BaseModel]]
+    payload: Union[str, type[BaseModel]]
 
 
 class S3ObjectUserRequest(BaseModel):
     url: str
-    headers: Dict[str, str]
+    headers: dict[str, str]
 
 
 class S3ObjectSessionIssuer(BaseModel):

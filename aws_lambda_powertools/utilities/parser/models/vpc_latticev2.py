@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict, Optional, Type, Union
+from typing import Optional, Union
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -113,20 +113,20 @@ class VpcLatticeV2Model(BaseModel):
         description="The HTTP method used for the request.",
         examples=["GET", "POST", "PUT", "DELETE", "PATCH"],
     )
-    headers: Dict[str, str] = Field(
+    headers: dict[str, str] = Field(
         description="The request headers as key-value pairs.",
         examples=[
             {"host": "test-lambda-service.vpc-lattice-svcs.us-east-2.on.aws", "user-agent": "curl/7.64.1"},
             {"content-type": "application/json"},
         ],
     )
-    query_string_parameters: Optional[Dict[str, str]] = Field(
+    query_string_parameters: Optional[dict[str, str]] = Field(
         None,
         alias="queryStringParameters",
         description="The query string parameters as key-value pairs.",
         examples=[{"order-id": "1"}, {"page": "2", "limit": "10"}],
     )
-    body: Optional[Union[str, Type[BaseModel]]] = Field(
+    body: Optional[Union[str, type[BaseModel]]] = Field(
         None,
         description="The request body. Can be a string or a parsed model if content-type allows parsing.",
     )

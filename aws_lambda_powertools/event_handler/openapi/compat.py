@@ -34,15 +34,15 @@ evaluate_forwardref = eval_type_lenient
 
 sequence_annotation_to_type = {
     Sequence: list,
-    List: list,
+    List: list,  # noqa: UP006 - runtime compatibility with typing.List
     list: list,
-    Tuple: tuple,
+    Tuple: tuple,  # noqa: UP006 - runtime compatibility with typing.Tuple
     tuple: tuple,
-    Set: set,
+    Set: set,  # noqa: UP006 - runtime compatibility with typing.Set
     set: set,
-    FrozenSet: frozenset,
+    FrozenSet: frozenset,  # noqa: UP006 - runtime compatibility with typing.FrozenSet
     frozenset: frozenset,
-    Deque: deque,
+    Deque: deque,  # noqa: UP006 - runtime compatibility with typing.Deque
     deque: deque,
 }
 

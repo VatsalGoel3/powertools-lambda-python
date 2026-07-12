@@ -1,7 +1,7 @@
 import json
 import uuid
 from random import randint
-from typing import Any, Awaitable, Callable, Dict, Optional
+from typing import Any, Awaitable, Callable, Optional
 
 import pytest
 from pydantic import BaseModel, field_validator
@@ -236,7 +236,7 @@ def async_dynamodb_record_handler() -> Callable[..., Awaitable[Any]]:
 
 @pytest.fixture(scope="module")
 def order_event_factory() -> Callable:
-    def factory(item: Dict) -> str:
+    def factory(item: dict) -> str:
         return json.dumps({"item": item})
 
     return factory
@@ -307,7 +307,7 @@ def test_batch_processor_dynamodb_context_model(dynamodb_event_factory, order_ev
         # auto transform json string
         # so Pydantic can auto-initialize nested Order model
         @field_validator("Message", mode="before")
-        def transform_message_to_dict(cls, value: Dict[Literal["S"], str]):
+        def transform_message_to_dict(cls, value: dict[Literal["S"], str]):
             return json.loads(value)
 
     class OrderDynamoDBChangeRecord(DynamoDBStreamChangedRecordModel):
@@ -351,7 +351,7 @@ def test_batch_processor_dynamodb_context_model_with_failure(dynamodb_event_fact
         # auto transform json string
         # so Pydantic can auto-initialize nested Order model
         @field_validator("Message", mode="before")
-        def transform_message_to_dict(cls, value: Dict[Literal["S"], str]):
+        def transform_message_to_dict(cls, value: dict[Literal["S"], str]):
             return json.loads(value)
 
     class OrderDynamoDBChangeRecord(DynamoDBStreamChangedRecordModel):

@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import List
 
 from typing_extensions import Annotated
 
@@ -21,7 +20,7 @@ class CountriesAllowed(Enum):
 @app.get("/hello")
 def get(
     cloudfront_viewer_country: Annotated[
-        List[CountriesAllowed],  # (1)!
+        list[CountriesAllowed],  # (1)!
         Header(
             description="This is multi value header parameter.",
         ),

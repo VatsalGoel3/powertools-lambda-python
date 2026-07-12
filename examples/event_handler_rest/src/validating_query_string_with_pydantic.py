@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
@@ -23,7 +23,7 @@ class Todo(BaseModel):
 
 @app.get("/todos")
 @tracer.capture_method
-def get_todos(todo: Annotated[Todo, Query()]) -> Dict[str, Any]:  # (1)!
+def get_todos(todo: Annotated[Todo, Query()]) -> dict[str, Any]:  # (1)!
     return todo.model_dump()
 
 

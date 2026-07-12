@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timedelta
-from typing import TYPE_CHECKING, Any, Dict, Generator, List, Optional
+from typing import TYPE_CHECKING, Any, Generator, Optional
 
 import boto3
 from botocore.paginate import PageIterator
@@ -18,9 +18,9 @@ class TraceSubsegment(BaseModel):
     start_time: float
     end_time: float
     aws: Optional[dict] = None
-    subsegments: Optional[List["TraceSubsegment"]] = None
-    annotations: Optional[Dict[str, Any]] = None
-    metadata: Optional[Dict[str, Dict[str, Any]]] = None
+    subsegments: Optional[list["TraceSubsegment"]] = None
+    annotations: Optional[dict[str, Any]] = None
+    metadata: Optional[dict[str, dict[str, Any]]] = None
 
 
 class TraceDocument(BaseModel):
@@ -30,13 +30,13 @@ class TraceDocument(BaseModel):
     end_time: float
     trace_id: str
     parent_id: Optional[str] = None
-    aws: Dict
+    aws: dict
     origin: str
-    subsegments: Optional[List[TraceSubsegment]] = None
+    subsegments: Optional[list[TraceSubsegment]] = None
 
 
 class TraceFetcher:
-    default_exclude_seg_name: List = ["Initialization", "Invocation", "Overhead"]
+    default_exclude_seg_name: list = ["Initialization", "Invocation", "Overhead"]
 
     def __init__(
         self,
@@ -44,9 +44,9 @@ class TraceFetcher:
         start_date: datetime,
         end_date: Optional[datetime] = None,
         xray_client: Optional[XRayClient] = None,
-        exclude_segment_name: Optional[List[str]] = None,
-        resource_name: Optional[List[str]] = None,
-        origin: Optional[List[str]] = None,
+        exclude_segment_name: Optional[list[str]] = None,
+        resource_name: Optional[list[str]] = None,
+        origin: Optional[list[str]] = None,
         minimum_traces: int = 1,
     ):
         """Fetch and expose traces from X-Ray based on parameters
@@ -84,13 +84,13 @@ class TraceFetcher:
         self.start_date = start_date
         self.end_date = end_date or self.start_date + timedelta(minutes=5)
         self.xray_client = xray_client or boto3.client("xray")
-        self.trace_documents: Dict[str, TraceDocument] = {}
-        self.subsegments: List[TraceSubsegment] = []
+        self.trace_documents: dict[str, TraceDocument] = {}
+        self.subsegments: list[TraceSubsegment] = []
         self.exclude_segment_name = exclude_segment_name or self.default_exclude_seg_name
         self.resource_name = resource_name
         self.origin = origin or ["AWS::Lambda::Function"]
-        self.annotations: List[Dict[str, Any]] = []
-        self.metadata: List[Dict[str, Dict[str, Any]]] = []
+        self.annotations: list[dict[str, Any]] = []
+        self.metadata: list[dict[str, dict[str, Any]]] = []
         self.minimum_traces = minimum_traces
 
         paginator = self.xray_client.get_paginator("get_trace_summaries")
@@ -106,14 +106,14 @@ class TraceFetcher:
         self.trace_documents = self._get_trace_documents(trace_ids)
         self.subsegments = self._get_subsegments()
 
-    def get_annotation(self, key: str, value: Optional[any] = None) -> List:
+    def get_annotation(self, key: str, value: Optional[any] = None) -> list:
         return [
             annotation
             for annotation in self.annotations
             if (value is not None and annotation.get(key) == value) or (value is None and key in annotation)
         ]
 
-    def get_metadata(self, key: str, namespace: str = "") -> List[Dict[str, Any]]:
+    def get_metadata(self, key: str, namespace: str = "") -> list[dict[str, Any]]:
         seen = []
         for meta in self.metadata:
             metadata = meta.get(namespace, {})
@@ -121,10 +121,10 @@ class TraceFetcher:
                 seen.append(metadata)
         return seen
 
-    def get_subsegment(self, name: str) -> List:
+    def get_subsegment(self, name: str) -> list:
         return [seg for seg in self.subsegments if seg.name == name]
 
-    def _find_nested_subsegments(self, subsegments: List[TraceSubsegment]) -> Generator[TraceSubsegment, None, None]:
+    def _find_nested_subsegments(self, subsegments: list[TraceSubsegment]) -> Generator[TraceSubsegment, None, None]:
         """Recursively yield any subsegment that we might be interested.
 
         It excludes any subsegments contained in exclude_segment_name.
@@ -153,7 +153,7 @@ class TraceFetcher:
                 # recursively iterate over any arbitrary number of subsegments
                 yield from self._find_nested_subsegments(seg.subsegments)
 
-    def _get_subsegments(self) -> List[TraceSubsegment]:
+    def _get_subsegments(self) -> list[TraceSubsegment]:
         """Find subsegments and potentially any nested subsegments
 
         It excludes any subsegments contained in exclude_segment_name.
@@ -171,7 +171,7 @@ class TraceFetcher:
 
         return seen
 
-    def _get_trace_ids(self, pages: PageIterator) -> List[str]:
+    def _get_trace_ids(self, pages: PageIterator) -> list[str]:
         """Get list of trace IDs found
 
         Parameters
@@ -189,7 +189,7 @@ class TraceFetcher:
         ValueError
             When no traces are available within time range and filter expression
         """
-        summaries: List[TraceSummaryTypeDef] = [trace["TraceSummaries"] for trace in pages if trace["TraceSummaries"]]
+        summaries: list[TraceSummaryTypeDef] = [trace["TraceSummaries"] for trace in pages if trace["TraceSummaries"]]
         if not summaries:
             raise ValueError("Empty response from X-Ray. Repeating...")
 
@@ -201,7 +201,7 @@ class TraceFetcher:
 
         return trace_ids
 
-    def _get_trace_documents(self, trace_ids: List[str]) -> Dict[str, TraceDocument]:
+    def _get_trace_documents(self, trace_ids: list[str]) -> dict[str, TraceDocument]:
         """Find trace documents available in each trace segment
 
         Returns
@@ -210,7 +210,7 @@ class TraceFetcher:
             Trace documents grouped by their ID
         """
         traces = self.xray_client.batch_get_traces(TraceIds=trace_ids)
-        documents: Dict = {}
+        documents: dict = {}
         segments = [seg for trace in traces["Traces"] for seg in trace["Segments"]]
         for seg in segments:
             trace_document = TraceDocument(**json.loads(seg["Document"]))
@@ -225,9 +225,9 @@ def get_traces(
     start_date: datetime,
     end_date: Optional[datetime] = None,
     xray_client: Optional[XRayClient] = None,
-    exclude_segment_name: Optional[List[str]] = None,
-    resource_name: Optional[List[str]] = None,
-    origin: Optional[List[str]] = None,
+    exclude_segment_name: Optional[list[str]] = None,
+    resource_name: Optional[list[str]] = None,
+    origin: Optional[list[str]] = None,
     minimum_traces: int = 1,
 ) -> TraceFetcher:
     """Fetch traces from AWS X-Ray

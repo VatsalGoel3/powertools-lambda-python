@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, TypedDict, Union
+from typing import TYPE_CHECKING, Any, TypedDict, Union
 
 if TYPE_CHECKING:
     from typing_extensions import NotRequired, TypeAlias
@@ -42,5 +42,5 @@ class PowertoolsStackTrace(TypedDict):
     frames: list[dict[str, Any]]
 
 
-LogRecord: TypeAlias = Union[Dict[str, Any], PowertoolsLogRecord]
-LogStackTrace: TypeAlias = Union[Dict[str, Any], PowertoolsStackTrace]
+LogRecord: TypeAlias = Union[dict[str, Any], PowertoolsLogRecord]
+LogStackTrace: TypeAlias = Union[dict[str, Any], PowertoolsStackTrace]

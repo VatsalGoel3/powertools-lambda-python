@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -30,7 +30,7 @@ class MyDynamoDBStreamRecordModel(DynamoDBStreamRecordModel):
 
 
 class MyAdvancedDynamoBusiness(DynamoDBStreamModel):
-    Records: List[MyDynamoDBStreamRecordModel]
+    Records: list[MyDynamoDBStreamRecordModel]
 
 
 class MyEventbridgeBusiness(BaseModel):
@@ -52,7 +52,7 @@ class MyAdvancedSqsRecordModel(SqsRecordModel):
 
 
 class MyAdvancedSqsBusiness(SqsModel):
-    Records: List[MyAdvancedSqsRecordModel]
+    Records: list[MyAdvancedSqsRecordModel]
 
 
 class MySnsBusiness(BaseModel):
@@ -69,7 +69,7 @@ class MyAdvancedSnsRecordModel(SnsRecordModel):
 
 
 class MyAdvancedSnsBusiness(SnsModel):
-    Records: List[MyAdvancedSnsRecordModel]
+    Records: list[MyAdvancedSnsRecordModel]
 
 
 class MyKinesisBusiness(BaseModel):

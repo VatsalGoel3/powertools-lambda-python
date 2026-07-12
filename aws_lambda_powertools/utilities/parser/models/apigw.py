@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, List, Literal, Optional, Type, Union
+from typing import Any, Literal, Optional, Union
 
 from pydantic import BaseModel, field_validator, model_validator
 from pydantic.networks import IPvAnyNetwork
@@ -46,8 +46,8 @@ class APIGatewayEventIdentity(BaseModel):
 
 
 class APIGatewayEventAuthorizer(BaseModel):
-    claims: Optional[Dict[str, Any]] = None
-    scopes: Optional[List[str]] = None
+    claims: Optional[dict[str, Any]] = None
+    scopes: Optional[list[str]] = None
 
 
 class APIGatewayEventRequestContext(BaseModel):
@@ -88,15 +88,15 @@ class APIGatewayProxyEventModel(BaseModel):
     resource: str
     path: str
     httpMethod: Literal["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    headers: Dict[str, str]
-    multiValueHeaders: Dict[str, List[str]]
-    queryStringParameters: Optional[Dict[str, str]] = None
-    multiValueQueryStringParameters: Optional[Dict[str, List[str]]] = None
+    headers: dict[str, str]
+    multiValueHeaders: dict[str, list[str]]
+    queryStringParameters: Optional[dict[str, str]] = None
+    multiValueQueryStringParameters: Optional[dict[str, list[str]]] = None
     requestContext: APIGatewayEventRequestContext
-    pathParameters: Optional[Dict[str, str]] = None
-    stageVariables: Optional[Dict[str, str]] = None
+    pathParameters: Optional[dict[str, str]] = None
+    stageVariables: Optional[dict[str, str]] = None
     isBase64Encoded: Optional[bool] = None
-    body: Optional[Union[str, Type[BaseModel]]] = None
+    body: Optional[Union[str, type[BaseModel]]] = None
 
 
 class ApiGatewayAuthorizerToken(BaseModel):

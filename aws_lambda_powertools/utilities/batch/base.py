@@ -14,7 +14,7 @@ import os
 import sys
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Tuple, TypeGuard, Union, overload
+from typing import TYPE_CHECKING, Any, TypeGuard, Union, overload
 
 from aws_lambda_powertools.shared import constants
 from aws_lambda_powertools.utilities.batch.exceptions import (
@@ -58,8 +58,8 @@ class EventType(Enum):
 # When using Pydantic Models, it'll accept any subclass from SQS, DynamoDB, Kinesis and Kafka
 EventSourceDataClassTypes = Union[SQSRecord, KinesisStreamRecord, DynamoDBRecord, KafkaEventRecord]
 BatchEventTypes = Union[EventSourceDataClassTypes, BatchTypeModels]
-SuccessResponse = Tuple[str, Any, BatchEventTypes]
-FailureResponse = Tuple[str, str, BatchEventTypes]
+SuccessResponse = tuple[str, Any, BatchEventTypes]
+FailureResponse = tuple[str, str, BatchEventTypes]
 
 
 def _has_traceback(exception: ExceptionInfo) -> TypeGuard[tuple[type[BaseException], BaseException, TracebackType]]:

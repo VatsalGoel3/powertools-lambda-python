@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict, List, Literal, Optional, Sequence, Type, Union
+from typing import Literal, Optional, Sequence, Union
 
 from pydantic import BaseModel, Field
 
@@ -59,12 +59,12 @@ class SqsMsgAttributeModel(BaseModel):
         description="The binary value of the message attribute, base64-encoded.",
         examples=["base64Str", "SGVsbG8gV29ybGQ=", None],
     )
-    stringListValues: List[str] = Field(
+    stringListValues: list[str] = Field(
         default=[],
         description="A list of string values for the message attribute.",
         examples=[["item1", "item2"], ["tag1", "tag2", "tag3"], []],
     )
-    binaryListValues: List[str] = Field(
+    binaryListValues: list[str] = Field(
         default=[],
         description="A list of binary values for the message attribute, each base64-encoded.",
         examples=[["dmFsdWUx", "dmFsdWUy"], ["aGVsbG8="], []],
@@ -115,7 +115,7 @@ class SqsRecordModel(BaseModel):
             "AQEBzWwaftRI0KuVm4tP+/7q1rGgNqicHq...",
         ],
     )
-    body: Union[str, Type[BaseModel], BaseModel] = Field(
+    body: Union[str, type[BaseModel], BaseModel] = Field(
         description="The message's contents (not URL-encoded). Can be plain text or JSON.",
         examples=[
             "Test message.",
@@ -126,7 +126,7 @@ class SqsRecordModel(BaseModel):
     attributes: SqsAttributesModel = Field(
         description="A map of the attributes requested in ReceiveMessage to their respective values.",
     )
-    messageAttributes: Dict[str, SqsMsgAttributeModel] = Field(
+    messageAttributes: dict[str, SqsMsgAttributeModel] = Field(
         description="User-defined message attributes as key-value pairs.",
         examples=[
             {"testAttr": {"stringValue": "100", "binaryValue": "base64Str", "dataType": "Number"}},

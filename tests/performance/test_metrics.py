@@ -1,7 +1,7 @@
 import json
 import time
 from contextlib import contextmanager
-from typing import Dict, Generator
+from typing import Generator
 
 import pytest
 
@@ -43,7 +43,7 @@ def namespace() -> str:
 
 
 @pytest.fixture
-def metric() -> Dict[str, str]:
+def metric() -> dict[str, str]:
     return {"name": "single_metric", "unit": MetricUnit.Count, "value": 1}
 
 

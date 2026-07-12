@@ -1,5 +1,5 @@
 import json
-from typing import List, Optional
+from typing import Optional
 
 from pydantic import BaseModel, Field, PositiveInt, field_validator
 
@@ -51,7 +51,7 @@ class KinesisFirehoseSqsModel(BaseModel):
         (only present when the delivery stream source is a Kinesis stream).",
         examples=["arn:aws:kinesis:us-east-1:123456789012:stream/my-source-stream"],
     )
-    records: List[KinesisFirehoseSqsRecord] = Field(
+    records: list[KinesisFirehoseSqsRecord] = Field(
         description="A list of SQS records delivered through Kinesis Data Firehose \
         to be processed by the Lambda function.",
         examples=[[]],

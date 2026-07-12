@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import Optional, Type, TypedDict, Union
+from typing import Optional, TypedDict, Union
 
 has_pydantic = "pydantic" in sys.modules
 
@@ -16,13 +16,13 @@ if has_pydantic:  # pragma: no cover
 
     BatchTypeModels = Optional[
         Union[
-            Type[SqsRecordModel],
-            Type[DynamoDBStreamRecordModel],
-            Type[KinesisDataStreamRecordModel],
-            Type[KafkaRecordModel],
+            type[SqsRecordModel],
+            type[DynamoDBStreamRecordModel],
+            type[KinesisDataStreamRecordModel],
+            type[KafkaRecordModel],
         ]
     ]
-    BatchSqsTypeModel = Optional[Type[SqsRecordModel]]
+    BatchSqsTypeModel = Optional[type[SqsRecordModel]]
 else:  # pragma: no cover
     BatchTypeModels = "BatchTypeModels"  # type: ignore
     BatchSqsTypeModel = "BatchSqsTypeModel"  # type: ignore

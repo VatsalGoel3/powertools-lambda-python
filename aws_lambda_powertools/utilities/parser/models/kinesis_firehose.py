@@ -1,4 +1,4 @@
-from typing import List, Optional, Type, Union
+from typing import Optional, Union
 
 from pydantic import BaseModel, Field, PositiveInt, field_validator
 
@@ -30,7 +30,7 @@ class KinesisFirehoseRecordMetadata(BaseModel):
 
 
 class KinesisFirehoseRecord(BaseModel):
-    data: Union[bytes, Type[BaseModel]] = Field(  # base64 encoded str is parsed into bytes
+    data: Union[bytes, type[BaseModel]] = Field(  # base64 encoded str is parsed into bytes
         description="The data payload of the record. Base64 encoded string is automatically decoded to bytes.",
     )
     recordId: str = Field(
@@ -75,7 +75,7 @@ class KinesisFirehoseModel(BaseModel):
         (only present when the delivery stream source is a Kinesis stream).",
         examples=["arn:aws:kinesis:us-east-1:123456789012:stream/my-source-stream"],
     )
-    records: List[KinesisFirehoseRecord] = Field(
+    records: list[KinesisFirehoseRecord] = Field(
         description="A list of records to be processed by the Lambda function.",
         examples=[[]],
     )

@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import List
 
 from typing_extensions import Annotated
 
@@ -21,7 +20,7 @@ class ExampleEnum(Enum):
 @app.get("/todos")
 def get(
     example_multi_value_param: Annotated[
-        List[ExampleEnum],  # (1)!
+        list[ExampleEnum],  # (1)!
         Query(
             description="This is multi value query parameter.",
         ),

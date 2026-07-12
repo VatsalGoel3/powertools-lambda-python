@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import Any, Dict, Literal, Union
+from typing import Any, Literal, Union
 
 import pydantic
 import pytest
@@ -17,7 +17,7 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 @pytest.mark.parametrize("invalid_value", [None, False, [], (), object])
 def test_parser_unsupported_event(dummy_schema, invalid_value):
     @event_parser(model=dummy_schema)
-    def handle_no_envelope(event: Dict, _: LambdaContext):
+    def handle_no_envelope(event: dict, _: LambdaContext):
         return event
 
     with pytest.raises(ValidationError):
@@ -30,7 +30,7 @@ def test_parser_unsupported_event(dummy_schema, invalid_value):
 )
 def test_parser_invalid_envelope_type(dummy_event, dummy_schema, invalid_envelope, expected):
     @event_parser(model=dummy_schema, envelope=invalid_envelope)
-    def handle_no_envelope(event: Dict, _: LambdaContext):
+    def handle_no_envelope(event: dict, _: LambdaContext):
         return event
 
     if hasattr(expected, "__cause__"):
@@ -42,7 +42,7 @@ def test_parser_invalid_envelope_type(dummy_event, dummy_schema, invalid_envelop
 
 def test_parser_schema_with_envelope(dummy_event, dummy_schema, dummy_envelope):
     @event_parser(model=dummy_schema, envelope=dummy_envelope)
-    def handle_no_envelope(event: Dict, _: LambdaContext):
+    def handle_no_envelope(event: dict, _: LambdaContext):
         return event
 
     handle_no_envelope(dummy_event, LambdaContext())
@@ -50,7 +50,7 @@ def test_parser_schema_with_envelope(dummy_event, dummy_schema, dummy_envelope):
 
 def test_parser_schema_no_envelope(dummy_event, dummy_schema):
     @event_parser(model=dummy_schema)
-    def handle_no_envelope(event: Dict, _: LambdaContext):
+    def handle_no_envelope(event: dict, _: LambdaContext):
         return event
 
     handle_no_envelope(dummy_event["payload"], LambdaContext())
@@ -80,7 +80,7 @@ def test_pydanticv2_validation():
 @pytest.mark.parametrize("invalid_schema", [False, [], ()])
 def test_parser_with_invalid_schema_type(dummy_event, invalid_schema):
     @event_parser(model=invalid_schema)
-    def handle_no_envelope(event: Dict, _: LambdaContext):
+    def handle_no_envelope(event: dict, _: LambdaContext):
         return event
 
     with pytest.raises(exceptions.InvalidModelTypeError):
@@ -91,7 +91,7 @@ def test_parser_event_as_json_string(dummy_event, dummy_schema):
     dummy_event = json.dumps(dummy_event["payload"])
 
     @event_parser(model=dummy_schema)
-    def handle_no_envelope(event: Union[Dict, str], _: LambdaContext):
+    def handle_no_envelope(event: Union[dict, str], _: LambdaContext):
         return event
 
     handle_no_envelope(dummy_event, LambdaContext())
@@ -137,7 +137,7 @@ def test_parser_validation_error():
         name: str
 
     @event_parser(model=StrictModel)
-    def handle_validation(event: Dict, _: LambdaContext):
+    def handle_validation(event: dict, _: LambdaContext):
         return event
 
     invalid_event = {"age": "not_a_number", "name": 123}  # intentionally wrong types
@@ -154,7 +154,7 @@ def test_parser_type_value_errors():
         status: Literal["SUCCESS", "FAILURE"]
 
     @event_parser(model=CustomModel)
-    def handle_type_validation(event: Dict, _: LambdaContext):
+    def handle_type_validation(event: dict, _: LambdaContext):
         return event
 
     # Test both TypeError and ValueError scenarios

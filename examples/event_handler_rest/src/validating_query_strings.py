@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 import requests
 from pydantic import BaseModel, Field
@@ -24,7 +24,7 @@ class Todo(BaseModel):
 
 @app.get("/todos")
 @tracer.capture_method
-def get_todos(completed: Annotated[Optional[str], Query(min_length=4)] = None) -> List[Todo]:  # (3)!
+def get_todos(completed: Annotated[Optional[str], Query(min_length=4)] = None) -> list[Todo]:  # (3)!
     url = "https://jsonplaceholder.typicode.com/todos"
 
     if completed is not None:

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, List, Literal, Optional, Type, Union
+from typing import Any, Literal, Optional, Union
 
 from pydantic import BaseModel, Field, field_validator
 from pydantic.networks import IPvAnyNetwork
@@ -8,7 +8,7 @@ from aws_lambda_powertools.utilities.parser.functions import _validate_source_ip
 
 
 class RequestContextV2AuthorizerIamCognito(BaseModel):
-    amr: List[str]
+    amr: list[str]
     identityId: str
     identityPoolId: str
 
@@ -24,14 +24,14 @@ class RequestContextV2AuthorizerIam(BaseModel):
 
 
 class RequestContextV2AuthorizerJwt(BaseModel):
-    claims: Dict[str, Any]
-    scopes: Optional[List[str]] = None
+    claims: dict[str, Any]
+    scopes: Optional[list[str]] = None
 
 
 class RequestContextV2Authorizer(BaseModel):
     jwt: Optional[RequestContextV2AuthorizerJwt] = None
     iam: Optional[RequestContextV2AuthorizerIam] = None
-    lambda_value: Optional[Dict[str, Any]] = Field(None, alias="lambda")
+    lambda_value: Optional[dict[str, Any]] = Field(None, alias="lambda")
 
 
 class RequestContextV2Http(BaseModel):
@@ -66,17 +66,17 @@ class APIGatewayProxyEventV2Model(BaseModel):
     routeKey: str
     rawPath: str
     rawQueryString: str
-    cookies: Optional[List[str]] = None
-    headers: Dict[str, str]
-    queryStringParameters: Optional[Dict[str, str]] = None
-    pathParameters: Optional[Dict[str, str]] = None
-    stageVariables: Optional[Dict[str, str]] = None
+    cookies: Optional[list[str]] = None
+    headers: dict[str, str]
+    queryStringParameters: Optional[dict[str, str]] = None
+    pathParameters: Optional[dict[str, str]] = None
+    stageVariables: Optional[dict[str, str]] = None
     requestContext: RequestContextV2
-    body: Optional[Union[str, Type[BaseModel]]] = None
+    body: Optional[Union[str, type[BaseModel]]] = None
     isBase64Encoded: Optional[bool] = None
 
 
 class ApiGatewayAuthorizerRequestV2(APIGatewayProxyEventV2Model):
     type: Literal["REQUEST"]
     routeArn: str
-    identitySource: Optional[List[str]] = None
+    identitySource: Optional[list[str]] = None

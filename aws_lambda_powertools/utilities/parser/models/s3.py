@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Literal, Optional, Union
+from typing import Literal, Optional, Union
 
 from pydantic import BaseModel, model_validator
 from pydantic.fields import Field
@@ -498,7 +498,7 @@ class S3RecordModel(BaseModel):
 
 
 class S3Model(BaseModel):
-    Records: List[S3RecordModel] = Field(
+    Records: list[S3RecordModel] = Field(
         description="List of S3 records included in this event.",
         examples=[
             {
